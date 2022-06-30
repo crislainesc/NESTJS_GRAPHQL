@@ -34,7 +34,7 @@ export class GameService {
     const gameSaved = await this.gameRepository.save(game);
 
     if (!gameSaved) {
-      throw new InternalServerErrorException('Problem for create a new user');
+      throw new InternalServerErrorException('Problem for create a new game');
     }
 
     return gameSaved;
