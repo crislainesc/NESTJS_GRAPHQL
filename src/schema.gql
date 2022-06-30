@@ -29,11 +29,20 @@ type Game {
   updated_at: DateTime!
 }
 
+type Cart {
+  id: String!
+  min_cart_value: Float!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
 type Query {
   users: [User!]!
   user(id: String!): User!
   games: [Game!]!
   game(id: String!): Game!
+  carts: [Cart!]!
+  cart(id: String!): Cart!
 }
 
 type Mutation {
@@ -43,6 +52,9 @@ type Mutation {
   createGame(data: CreateGameInput!): Game!
   updateGame(id: String!, data: UpdateGameInput!): Game!
   deleteGame(id: String!): Boolean!
+  createCart(data: CreateCartInput!): Cart!
+  updateCart(id: String!, data: UpdateCartInput!): Cart!
+  deleteCart(id: String!): Boolean!
 }
 
 input CreateUserInput {
@@ -74,4 +86,12 @@ input UpdateGameInput {
   price: Float
   max_number: Float
   color: String
+}
+
+input CreateCartInput {
+  min_cart_value: Float!
+}
+
+input UpdateCartInput {
+  min_cart_value: Float
 }
