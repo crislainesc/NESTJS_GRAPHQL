@@ -45,17 +45,17 @@ export class UserService {
 
     await this.userRepository.update({ ...user }, { ...data });
 
-    const userUpdated = this.userRepository.create({ ...user, ...data });
+    const userUpdated = await this.userRepository.save({ ...user, ...data });
 
     return userUpdated;
   }
 
   async deleteUser(id: string): Promise<boolean> {
-    const user = await this.findUserById(id);
+    await this.findUserById(id);
 
-    const deletedUser = await this.userRepository.delete({ ...user });
+    const deletedUser = await this.userRepository.delete(id);
 
-    if (deletedUser) {
+    if (deletedUser.affected) {
       return true;
     }
 
