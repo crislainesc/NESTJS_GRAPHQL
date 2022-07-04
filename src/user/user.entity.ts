@@ -1,6 +1,13 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
+import {
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { hashPasswordTransform } from 'src/common/helpers/crypto';
 
 @ObjectType()
 @Entity()
@@ -15,7 +22,8 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ transformer: hashPasswordTransform })
+  @HideField()
   password: string;
 
   @Column({ default: 'player' })
@@ -26,12 +34,4 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @BeforeInsert()
-  async hashPassword() {
-    if (this.password) {
-      const hashedPassword = await bcrypt.hash(this.password, 10);
-      this.password = hashedPassword;
-    }
-  }
 }
