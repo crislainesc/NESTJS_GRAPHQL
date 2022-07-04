@@ -6,7 +6,6 @@ type User {
   id: ID!
   name: String!
   email: String!
-  password: String!
   access_profile: String!
   created_at: DateTime!
   updated_at: DateTime!
@@ -36,13 +35,33 @@ type Cart {
   updated_at: DateTime!
 }
 
+type Bet {
+  id: ID!
+  numbers: String!
+  user_id: String!
+  game_id: String!
+  price: Float!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type AuthType {
+  user: User!
+  token: String!
+}
+
 type Query {
   users: [User!]!
   user(id: String!): User!
+  userByEmail(email: String!): User!
   games: [Game!]!
   game(id: String!): Game!
   carts: [Cart!]!
   cart(id: String!): Cart!
+  bets: [Bet!]!
+  bet(id: String!): Bet!
+  betsByUserId(userId: String!): [Bet!]!
+  betsByGameId(userId: String!, gameId: String!): [Bet!]!
 }
 
 type Mutation {
@@ -55,6 +74,10 @@ type Mutation {
   createCart(data: CreateCartInput!): Cart!
   updateCart(id: String!, data: UpdateCartInput!): Cart!
   deleteCart(id: String!): Boolean!
+  createBet(data: CreateBetInput!): [Bet!]!
+  updateBet(id: String!, data: UpdateBetInput!): Bet!
+  deleteBet(id: String!): Boolean!
+  login(data: AuthInput!): AuthType!
 }
 
 input CreateUserInput {
@@ -94,4 +117,27 @@ input CreateCartInput {
 
 input UpdateCartInput {
   min_cart_value: Float
+}
+
+input CreateBetInput {
+  bets: [CreateGameObject!]!
+}
+
+input CreateGameObject {
+  game_id: String!
+  numbers: [Float!]!
+}
+
+input UpdateBetInput {
+  bet: UpdateGameObject!
+}
+
+input UpdateGameObject {
+  game_id: String!
+  numbers: [Float!]!
+}
+
+input AuthInput {
+  email: String!
+  password: String!
 }
