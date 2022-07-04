@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { GqlAuthGuard } from 'src/auth/auth.guard';
 import { Bet } from './bet.entity';
 import { BetService } from './bet.service';
 import { CreateBetInput } from './dto/create-bet.input';
@@ -8,24 +10,28 @@ import { UpdateBetInput } from './dto/update-bet.input';
 export class BetResolver {
   constructor(private betService: BetService) {}
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => [Bet])
   async bets(): Promise<Bet[]> {
     const bets = await this.betService.findAllBets();
     return bets;
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => Bet)
   async bet(@Args('id') id: string): Promise<Bet> {
     const bet = await this.betService.findBetById(id);
     return bet;
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => [Bet])
   async betsByUserId(@Args('userId') userId: string): Promise<Bet[]> {
     const bets = await this.betService.findBetsByUserId(userId);
     return bets;
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => [Bet])
   async betsByGameId(
     @Args('userId') userId: string,
@@ -35,6 +41,7 @@ export class BetResolver {
     return bets;
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => [Bet])
   async createBet(@Args('data') data: CreateBetInput): Promise<Bet[]> {
     const bet = await this.betService.createBet(data);
