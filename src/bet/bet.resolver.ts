@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { GqlAuthGuard } from 'src/auth/auth.guard';
+import { AccessProfileVerifyGuard } from 'src/guards/access.profile.verify.guard';
 import { Bet } from './bet.entity';
 import { BetService } from './bet.service';
 import { CreateBetInput } from './dto/create-bet.input';
@@ -48,6 +49,7 @@ export class BetResolver {
     return bet;
   }
 
+  @UseGuards(GqlAuthGuard, AccessProfileVerifyGuard)
   @Mutation(() => Bet)
   async updateBet(
     @Args('id') id: string,
@@ -57,6 +59,7 @@ export class BetResolver {
     return bet;
   }
 
+  @UseGuards(GqlAuthGuard, AccessProfileVerifyGuard)
   @Mutation(() => Boolean)
   async deleteBet(@Args('id') id: string): Promise<boolean> {
     const betDeleted = await this.betService.deleteBet(id);
