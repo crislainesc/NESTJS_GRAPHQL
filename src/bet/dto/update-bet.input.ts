@@ -1,5 +1,5 @@
 import { InputType } from '@nestjs/graphql';
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsObject, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 class UpdateGameObject {
@@ -16,7 +16,7 @@ class UpdateGameObject {
 
 @InputType()
 export class UpdateBetInput {
-  @IsArray({ message: 'The type entered for the bets field is not valid' })
+  @IsObject({ message: 'The type entered for the bets field is not valid' })
   @IsNotEmpty({ message: 'The bets field cannot be empty' })
   @IsOptional()
   bet: UpdateGameObject;
